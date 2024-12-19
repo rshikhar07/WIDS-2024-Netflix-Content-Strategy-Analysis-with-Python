@@ -1,0 +1,117 @@
+#Q1
+import pandas as pd
+df = pd.read_csv('Chess.csv')
+print(df)
+A=df.sort_values('ELO',ascending=False)
+highest_elo_player = A.head(1)
+print(A.head(1))
+print("Highest ELO player is: "+ df['Name'][0])
+
+#Q2
+
+B= A.drop_duplicates(subset='Name')
+print("\nTop 10 Players with the Highest Elo:")
+print(B[0:10])
+
+#Q3
+
+import matplotlib.pyplot as plt
+df['Year'] = df['Date'].str[:4].astype(int) 
+average_elo_per_year = []
+for year in df['Year'].unique():
+    df_year = df[df['Year'] == year]
+    top_10_that_year = df_year[0:10]
+    avg_elo = top_10_that_year['ELO'].mean()
+    print(avg_elo)
+    average_elo_per_year.append((year, avg_elo))
+average_elo_df = pd.DataFrame(average_elo_per_year, columns=['Year', 'Average Elo'])
+plt.figure(figsize=(10, 6))
+plt.plot(average_elo_df['Year'], average_elo_df['Average Elo'], marker='o')
+plt.title('Time Trend of Top 10 Players\' Average Elo Each Year')
+plt.xlabel('Year')
+plt.ylabel('Average Elo')
+plt.grid(True)
+plt.show()
+
+#Q4
+
+df['Year'] = df['Date'].str[:4].astype(int)
+players_above_2750 = []
+for year in df['Year'].unique():
+    df_year = df[df['Year'] == year]
+    players_above_2750_elo = df_year[df_year['ELO'] > 2750]
+    players_above_2750.append((year, len(players_above_2750_elo)))
+
+players_above_2750_df = pd.DataFrame(players_above_2750, columns=['Year', 'Players Above 2750 Elo'])
+
+plt.figure(figsize=(10, 6))
+plt.plot(players_above_2750_df['Year'], players_above_2750_df['Players Above 2750 Elo'], marker='o', color='b', label='Players with Elo > 2750')
+plt.title("Number of Players Above 2750 Elo Over Time")
+plt.xlabel("Year")
+plt.ylabel("Number of Players Above 2750 Elo")
+plt.grid(True)
+plt.xticks(rotation=45)
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+
+#Q5
+
+average_age_per_year = []
+for year in df['Year'].unique():
+    df_year = df[df['Year'] == year]
+    top_10_that_year = df_year[0:10]
+    avg_age = top_10_that_year['Age'].mean()
+    print(avg_age)
+    average_age_per_year.append((year, avg_age))
+average_age_df = pd.DataFrame(average_age_per_year, columns=['Year', 'Average Age'])
+plt.figure(figsize=(10, 6))
+plt.plot(average_age_df['Year'], average_age_df['Average Age'], marker='o')
+plt.title('Time Trend of Top 10 Players\' Average Age Each Year')
+plt.xlabel('Year')
+plt.ylabel('Average Age')
+plt.grid(True)
+plt.show()
+
+#Q6
+
+df_under_25 = df[df['Age'] < 25]
+under_25_count_per_year = []
+for year in df['Year'].unique():
+    df_year = df[df['Year'] == year]
+    top_10_that_year = df_year[0:10]
+    top_10_under_25 = top_10_that_year[top_10_that_year['Age'] < 25]
+    print(top_10_under_25)
+    under_25_count_per_year.append((year, len(top_10_under_25)))
+    
+under_25_df = pd.DataFrame(under_25_count_per_year, columns=['Year', 'Under 25 Count'])
+
+plt.figure(figsize=(10, 6))
+plt.plot(under_25_df['Year'], under_25_df['Under 25 Count'], marker='o', color='g', label='Players under 25 in Top 10')
+plt.title("Number of Players Under 25 Years Old in Top 10 Over Time")
+plt.xlabel("Year")
+plt.ylabel("Number of Players Under 25")
+plt.grid(True)
+plt.xticks(rotation=45)
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+#Q7
+
+magnus_df = df[df['Name'] == 'Carlsen'].copy() 
+magnus_df.loc[:, 'Year'] = magnus_df['Date'].str[:4].astype(int)
+print(magnus_df)
+plt.figure(figsize=(10, 6))
+plt.plot(magnus_df['Year'], magnus_df['ELO'], marker='o', color='b', label='Magnus Carlsen Elo')
+plt.title("Magnus Carlsen's Elo Over Time")
+plt.xlabel("Year")
+plt.ylabel("Elo Rating")
+plt.grid(True)
+plt.xticks(rotation=45)
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+
